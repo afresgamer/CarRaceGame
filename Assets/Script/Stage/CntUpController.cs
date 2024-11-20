@@ -7,6 +7,9 @@ using TMPro;
 
 public class CntUpController : MonoBehaviour
 {
+    [SerializeField, Header("NPC車のリスト（複数台数対応可能）")]
+    private List<CpuCar> cpuCarList = new List<CpuCar>();
+
     private TextMeshProUGUI cntUpText;
     private CanvasGroup canvasGroup; 
 
@@ -53,5 +56,10 @@ public class CntUpController : MonoBehaviour
         CarGameManager.Instance.IsGameStart = true;
         canvasGroup.alpha = 1.0f;
         cntUpText.gameObject.SetActive(false);
+
+        foreach (var npc in cpuCarList) 
+        {
+            npc.enabled = true;
+        }
     }
 }

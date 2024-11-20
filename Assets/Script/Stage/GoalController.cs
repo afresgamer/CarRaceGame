@@ -17,6 +17,9 @@ public class GoalController : MonoBehaviour
 
     void Start()
     {
+        // 初期化
+        CarGameManager.Instance.Init();
+        CarGameManager.Instance.GoalCnt = goalLapCnt;
         var pointArray = FindObjectsOfType<CheckPoint>();
         checkPointList.AddRange(pointArray);
         if (pointArray.Length >= currentCheckPointCnt) checkPointCnt = currentCheckPointCnt;
@@ -54,7 +57,7 @@ public class GoalController : MonoBehaviour
             {
                 CarGameManager.Instance.CheckPointCnt = 0;
                 CarGameManager.Instance.LapCnt++;
-                if (CarGameManager.Instance.LapCnt == goalLapCnt) 
+                if (CarGameManager.Instance.LapCnt == CarGameManager.Instance.GoalCnt) 
                 {
                     SetGoal();
                     return;
@@ -74,6 +77,7 @@ public class GoalController : MonoBehaviour
 
     private void SetGoal()
     {
+        CustomDebugger.ColorLog(CarGameManager.Instance.LapTime.ToString(), GameConst.LogLevel.Lime);
         string timeString = string.Format("{0:D2}:{1:D2}:{2:D2}",
             (int)CarGameManager.Instance.LapTime / 60,
             (int)CarGameManager.Instance.LapTime % 60,
