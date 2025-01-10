@@ -16,6 +16,7 @@ public class CpuCar : MonoBehaviour
     private int loopCnt = 2;
 
     public int LapCnt { get; set; }
+    public int CheckCnt {  get; set; }
 
     void Start()
     {

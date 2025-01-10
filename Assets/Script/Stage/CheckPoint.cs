@@ -7,8 +7,8 @@ public class CheckPoint : MonoBehaviour
     private Transform createEffectPoint;
     private GameObject effect;
     [HideInInspector] public BoxCollider boxCollider;
-    void Start () 
-    { 
+    void Start ()
+    {
         createEffectPoint = transform.GetChild(0);
         boxCollider = GetComponent<BoxCollider>();
         effect = Instantiate(checkPointEffect.gameObject);
@@ -22,10 +22,18 @@ public class CheckPoint : MonoBehaviour
     {
         if (other.CompareTag(GameConst.PLAYER_TAG))
         {
+            if (!effect.GetComponent<ParticleSystem>().isPlaying) return;
+
             CarGameManager.Instance.CheckPointCnt++;
-            CustomDebugger.ColorLog("CheckPointCnt: " + CarGameManager.Instance.CheckPointCnt, GameConst.LogLevel.Lime);
             effect.GetComponent<ParticleSystem>().Stop();
-            boxCollider.enabled = false;
+        }
+        if (other.CompareTag(GameConst.CPUCAR_TAG))
+        {
+            var cpuCar = other.GetComponent<CpuCar>();
+            if (cpuCar != null) 
+            {
+                cpuCar.CheckCnt++;
+            }
         }
     }
 }

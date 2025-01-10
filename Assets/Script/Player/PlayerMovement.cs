@@ -1,5 +1,7 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class PlayerMovement : MonoBehaviour
     private float maxMoveSpeed = 200.0f;
     [SerializeField, Header("最大回転角度"), Range(15f, 45f)]
     private float maxSpinAngle = 45.0f;
+    [SerializeField, Header("速度表示")]
+    private TextMeshProUGUI speedMeterText;
+    [SerializeField, Header("スピードメーター")] private Image speedMeter;
 
     Rigidbody rb;
     CarInputSystem carInputSystem;
@@ -24,6 +29,10 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = carInfo.drag;
         rb.angularDrag = carInfo.angularDrag;
 
+        // スピードメーカー初期化
+        speedMeterText.text = Mathf.Clamp((int)rb.velocity.sqrMagnitude, 0, maxMoveSpeed) + " km/h";
+        speedMeter.fillAmount = Mathf.Clamp01(rb.velocity.normalized.magnitude);
+
         carInputSystem = new CarInputSystem();
         carInputSystem.CarPlayer.Move.started += OnMove;
         carInputSystem.CarPlayer.Move.performed += OnMove;
@@ -37,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
         if (!CarGameManager.Instance.IsGameStart) return;
 
         Movement();
+
+        // スピードメーカー更新
+        speedMeterText.text = Mathf.Clamp((int)rb.velocity.sqrMagnitude, 0, maxMoveSpeed) + " km/h";
+        Debug.Log(rb.velocity.sqrMagnitude / maxMoveSpeed);
+        speedMeter.fillAmount = rb.velocity.sqrMagnitude / maxMoveSpeed;
     }
 
     void Movement()
